@@ -1,7 +1,7 @@
 
 const Services = () => {
   return (
-    <div>This is Services Page</div>
+    <h2 className="text-center mt-5">This is Services Page</h2>
   )
 }
 
