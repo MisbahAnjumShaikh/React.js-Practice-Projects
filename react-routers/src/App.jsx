@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router";
+import { Routes, Route, Navigate } from "react-router";
 import { useState } from "react";
 import "./App.css";
 import Contact from "./assets/components/Contact";
@@ -11,7 +11,7 @@ function App() {
   const [isLogin, setIsLogin] = useState(false);
   return (
     <div>
-      <Navbar />
+      <Navbar isLogin={isLogin} />
       {isLogin ? (
         <Routes>
           <Route path="/" element={<Home />} />
@@ -23,6 +23,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       )}
       <button
@@ -32,7 +33,8 @@ function App() {
           setIsLogin(!isLogin);
         }}
       >
-        Click Here!
+        {/* Click Here!*/}
+        {isLogin ? "Logout" : "Login"}
       </button>
     </div>
   );
