@@ -1,11 +1,11 @@
 // import { useState } from "react";
 import { Link } from "react-router";
-// import App from "../../App.jsx"
+import { Fragment } from "react";
 const Navbar = ({isLogin}) => {  
-  // const [isLogin , setIsLogin] = useState(0)
   return (
-    
-    <nav>
+    <Fragment>
+   
+    {isLogin ? (
       <ul className="nav justify-content-center">
       
         <li className="nav-item">
@@ -23,6 +23,8 @@ const Navbar = ({isLogin}) => {
             Services
           </Link>
         </li>
+      </ul> ) : (
+        <ul className="nav justify-content-center">
          <li className="nav-item">
         <Link to={"/"} className="nav-link">
           <button type="button" className="btn btn-primary loginBtn">
@@ -37,12 +39,10 @@ const Navbar = ({isLogin}) => {
           </button>
         </Link>
       </li>
-
-        
-       
+  
       </ul>
-    </nav>
-
+    )} 
+  </Fragment>
   )
 }
 

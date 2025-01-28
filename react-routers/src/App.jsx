@@ -33,9 +33,9 @@ function App() {
           setIsLogin(!isLogin);
         }}
       >
-        {/* Click Here!*/}
-        {isLogin ? "Logout" : "Login"}
-      </button>
+         Click Here!
+{/*        {isLogin ? "Logout" : "Login"}
+*/}      </button>
     </div>
   );
 }
