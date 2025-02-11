@@ -1,6 +1,6 @@
 
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { QueryClient } from '@tanstack/react-query'
+import { useMutation, } from "@tanstack/react-query";
+import { useQuery, QueryClient } from '@tanstack/react-query'
 import { Fragment } from "react";
 import Card from "react-bootstrap/Card";
 import Container from "react-bootstrap/Container";
@@ -36,6 +36,8 @@ const Post2 = () => {
     },
   });
   const queryClient = useQuery 
+
+  // Delete Post
   const deletePost = useMutation({
     mutationFn : async (postId) => {
         const res = await fetch (`https://dummyjson.com/${postId}`, {
@@ -45,7 +47,28 @@ const Post2 = () => {
     }, 
     onSuccess : (data, postId) => {
         console.log(data, postId)
-        const queryClient.set
+        queryClient.setQueryData(["posts"], (curEle)=>{
+          return curEle.filter((post)=>post.id !== postId)
+        })
+    },
+  });
+
+  // Update Post
+  const updatePost = useMutation({
+    mutationFn: async ({postId, title, body}) => {
+      const res = await fetch(`https://dummyjson.com/${postId}`, {
+        method: "PUT",
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({title, body})
+      });
+      return res.json();
+    },
+    onSuccess:(updatePost)=>{//updated post object returned by the API
+      queryClient.setQueryData(["posts"], (curEle) => {
+        return curEle.map((post)=>{post.id === updatePost.id ? updatePost : post})
+      });
+      
+
     }
   })
   return (
