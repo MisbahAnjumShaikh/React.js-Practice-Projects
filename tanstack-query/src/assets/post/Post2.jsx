@@ -1,6 +1,5 @@
 
-import { useMutation, } from "@tanstack/react-query";
-import { useQuery, QueryClient } from '@tanstack/react-query'
+import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
 import { Fragment } from "react";
 import Card from "react-bootstrap/Card";
 import Container from "react-bootstrap/Container";
@@ -35,12 +34,12 @@ const Post2 = () => {
       }
     },
   });
-  const queryClient = useQuery 
+  const queryClient = useQueryClient();
 
   // Delete Post
   const deletePost = useMutation({
     mutationFn : async (postId) => {
-        const res = await fetch (`https://dummyjson.com/${postId}`, {
+        const res = await fetch (`https://dummyjson.com/posts/${postId}`, {
             method : "DELETE"
         })
         return res.json()
@@ -54,23 +53,33 @@ const Post2 = () => {
   });
 
   // Update Post
-  const updatePost = useMutation({
+  const updateMutation = useMutation({
     mutationFn: async ({postId, title, body}) => {
-      const res = await fetch(`https://dummyjson.com/${postId}`, {
+      const res = await fetch(`https://dummyjson.com/posts/${postId}`, {
         method: "PUT",
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({title, body})
       });
       return res.json();
     },
-    onSuccess:(updatePost)=>{//updated post object returned by the API
+    onSuccess:(updateInPost , data)=>{//updated post object returned by the API
+      console.log(data)
       queryClient.setQueryData(["posts"], (curEle) => {
-        return curEle.map((post)=>{post.id === updatePost.id ? updatePost : post})
+        return curEle.map((post)=>(post.id === updateInPost.id ? updateInPost : post))
       });
-      
-
     }
-  })
+  });
+
+
+  const updatePost = (postId, currentTitle, currentBody) => {
+    const newTitle = prompt("Enter new Title", currentTitle)
+    const newBody = prompt("Enter new Title", currentBody)
+
+    if(newTitle !== null && newBody !== null){
+      updateMutation.mutate({postId, title: newTitle, body: newBody})
+    }
+  }
+
   return (
     <Fragment>
       <div className="fw-bold fs-1">Posts</div>
@@ -87,7 +96,8 @@ const Post2 = () => {
                   <footer className="blockquote-footer">
                     Someone famous in <cite title="Source Title">Source Title</cite>
                   </footer>
-                  <button onClick={()=>{deletePost.mutate(id)}}>Delete</button>
+                  <button onClick={()=>{deletePost.mutate(id)}} className='m-2'>Delete</button>
+                  <button onClick={()=>{updatePost(id, title, body)}}>Update</button>
                 </blockquote>
               </Card.Body>
             </Card>
