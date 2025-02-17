@@ -73,7 +73,7 @@ const Post2 = () => {
 
   const updatePost = (postId, currentTitle, currentBody) => {
     const newTitle = prompt("Enter new Title", currentTitle)
-    const newBody = prompt("Enter new Title", currentBody)
+    const newBody = prompt("Enter new Body", currentBody)
 
     if(newTitle !== null && newBody !== null){
       updateMutation.mutate({postId, title: newTitle, body: newBody})
@@ -85,11 +85,11 @@ const Post2 = () => {
       <div className="fw-bold fs-1">Posts</div>
 
       {data && data.length > 0 ? (
-        data.map(({ title, id, body }) => (
+        data.map(({ title, id, body }, index) => (
           <Container key={id}>
             <br />
             <Card>
-              <Card.Header>{title}</Card.Header>
+              <Card.Header>{index + 1}. {title}</Card.Header>
               <Card.Body>
                 <blockquote className="blockquote mb-0">
                   <p>{body}</p>
